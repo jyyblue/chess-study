@@ -11,6 +11,16 @@ export default new Router({
       component: require('@/components/LandingPage').default
     },
     {
+      path: '/study/all',
+      name: 'study-all',
+      component: require('@/components/StudyAllPage').default
+    },
+    {
+      path: '/study/:id/detail',
+      name: 'study-detail',
+      component: require('@/components/StudyDetailPage').default
+    },
+    {
       path: '*',
       redirect: '/'
     }

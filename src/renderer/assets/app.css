@@ -1,0 +1,139 @@
+.d-flex {
+    display: flex;
+}
+.form-outline {
+    position: relative;
+}
+.form-outline .trailing {
+    position: absolute;
+    right: 10px;
+    left: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+.form-outline .form-control {
+    min-height: auto;
+    padding: 0.33em 0.75em;
+    border: 0;
+    border-radius: 50px;
+    background: transparent;
+    transition: all .2s linear;
+}
+.form-outline .form-icon-trailing {
+    padding-right: 2rem!important;
+}
+.btn-outline-info {
+    color: #17a2b8;
+    border-color: #17a2b8;
+}
+.btn-outline-main {
+    color: var(--color-green);
+    border-color: var(--color-green) !important;
+    background-color: transparent;
+    background-image: none;
+}
+.btn-outline-main:hover {
+    color: var(--main-text-color);
+    background-color: var(--color-green);
+    border-color: var(--color-green);
+}
+.btn-main {
+    background-color: var(--color-green);
+    border-color: var(--color-green);
+}
+
+.rounded-pill {
+    border-radius: 100px !important;
+}
+/* left menu style */
+.leftmenu {
+    position:absolute;
+    background: var(--nav-background);
+    width: var(--menu-width);
+    height: calc(100vh - 70px);
+    z-index: 1000;
+
+    transform-origin: center left;
+    transform: scaleX(0);
+    transition: max-height 0.3s ease 0s, transform 0.3s ease 0s, -webkit-transform 0.3s ease 0s;
+    margin-top: -5px;
+  }
+  .leftmenu.active {
+    transform: scaleX(1);
+  }
+  .layout-body {
+    padding-left: 0px;
+    transition: padding-left 0.3s ease 0s, transform 0.3s ease 0s, -webkit-transform 0.3s ease 0s;
+  }
+  .layout-body.menu-active {
+    padding-left: var(--menu-width);
+  }
+.sidenav-menu {
+    list-style: none;
+    position: relative;
+    padding: 0;
+    margin: 0;
+}
+.sidenav-item:first-child {
+    margin-top: 3rem;
+}
+
+.sidenav-item {
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+.sidenav-item.active {
+    color: var(--color-green);
+    background: var(--menu-active-background);
+}
+.sidenav-item.active .vertical-bar {
+    height: 100%;
+    width: 5px;
+    position: absolute;
+    background: white;
+    top: 0;
+    right: 0;
+    border-radius: 10px;
+    background: var(--color-green);
+}
+.sidenav-link {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: .89rem;
+    padding: 1rem 1.5rem;
+    height: 3rem;
+    color: unset;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: 5px;
+    transition: all .3s linear;
+}
+.sidenav-link .icon{
+    margin-right: 1rem;
+}
+.sidenav-link .icon i{
+    font-size: 1.4rem;
+}
+
+/* main part */
+.main-container {
+    padding: 2rem 2rem 2rem 2rem;
+}
+.pagination {
+    justify-content: flex-end !important;
+}
+.pagination-list{
+    flex-grow: inherit !important;
+}
+.pagination-link.is-current {
+    background-color: var(--color-green) !important;
+    border-color: var(--color-green) !important;
+}
+
+/* buefy modal */
+.animation-content {
+    z-index: 9999;
+}

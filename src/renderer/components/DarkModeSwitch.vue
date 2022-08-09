@@ -22,9 +22,9 @@ export default {
     darkMode () {
       if (this.darkMode === true) {
         /*  Darkmode -  Design: */
-        document.documentElement.style.setProperty('--main-bg-color', '#35383d')
+        document.documentElement.style.setProperty('--main-bg-color', '#17171f')
         document.documentElement.style.setProperty('--second-bg-color', '#40434a')
-        document.documentElement.style.setProperty('--main-text-color', '#99aab5')
+        document.documentElement.style.setProperty('--main-text-color', '#ffffff')
         document.documentElement.style.setProperty('--main-border-color', '#99aab5')
         document.documentElement.style.setProperty('--scroll-track-color', '#32363b')
         document.documentElement.style.setProperty('--scroll-thumb-color', '#23272a')
@@ -42,6 +42,8 @@ export default {
         document.documentElement.style.setProperty('--cancel-btn-hover', '#9a5255')
         document.documentElement.style.setProperty('--quicktour-highlight', '#99ccff')
         document.documentElement.style.setProperty('--tab-header-color', '#7289da')
+
+        document.documentElement.style.setProperty('--nav-background', '#222131')
 
         /* original dark mode:
         document.documentElement.style.setProperty('--main-bg-color', '#222326')
@@ -75,6 +77,8 @@ export default {
         document.documentElement.style.setProperty('--cancel-btn-hover', '#9a5255')
         document.documentElement.style.setProperty('--quicktour-highlight', '#F47174')
         document.documentElement.style.setProperty('--tab-header-color', '#7ec8ba')
+
+        document.documentElement.style.setProperty('--nav-background', '#222131')
       }
     }
   },

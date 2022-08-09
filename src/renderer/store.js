@@ -215,7 +215,9 @@ export const store = new Vuex.Store({
     shogiVariants: [
       '+ Add Custom', 'shogi'
     ],
-    clock: null
+    clock: null,
+    // left menu
+    showMenu: false
   },
   mutations: { // sync
     increaseEngineNumber (state) {
@@ -541,6 +543,15 @@ export const store = new Vuex.Store({
       localStorage.resized9x10width = state.resized9x10width
       localStorage.resized9x10height = state.resized9x10height
       localStorage.dimNumber = state.dimNumber
+    },
+    toggleLeftMenu (state, payload = null) {
+      let isShow
+      if (payload !== null) {
+        isShow = payload
+      } else {
+        isShow = !state.showMenu
+      }
+      state.showMenu = isShow
     }
   },
   actions: { // async

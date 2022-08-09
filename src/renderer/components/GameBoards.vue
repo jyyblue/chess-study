@@ -184,8 +184,8 @@ export default {
     startFen () {
       return this.$store.getters.startFen
     },
-    currentMove () { 
-    // returns undefined when the current fen doesnt match a move from the history, otherwise it returns move 
+    currentMove () {
+    // returns undefined when the current fen doesnt match a move from the history, otherwise it returns move
     // from the moves array that matches the current fen
       for (let num = 0; num < this.moves.length; num++) { // beware that it matches by current FEN, not the one after dispatching a new one
         if (this.moves[num].fen === this.fen) {

@@ -14,6 +14,10 @@ export default {
 @import "../../node_modules/vue-multiselect/dist/vue-multiselect.min.css";
 @import '../../node_modules/pretty-checkbox/dist/pretty-checkbox.css';
 @import './assets/mdi-icons/materialdesignicons.min.css';
+@import './assets/app.css';
+@import './assets/bootstrap/css/bootstrap.min.css';
+@import './assets/fontawesome/css/all.css';
+
 @import '~vue-context/dist/css/vue-context.css';
 
 @font-face {

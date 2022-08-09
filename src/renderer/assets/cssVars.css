@@ -1,26 +1,55 @@
 :root {
-    --main-bg-color: white;
-    --second-bg-color: #f1f1f1;
-    --main-text-color:  #131310; 
+    --main-bg-color: #17171f;
+    --second-bg-color: #40434a;
+    --main-text-color:  #ffffff; 
     --second-text-color:  #131310;
     --light-text-color: #fff; 
-    --main-border-color: #131310;
-    --scroll-track-color: lightgrey;
-    --scroll-thumb-color: grey;
-    --variation-color: lightgrey;
-    --button-color: #4f6a8e;
-    --tooltip-color: lightgrey;
-    --hover-color: #7287a4;
-    --save-btn-color: #7ec8ba;
-    --save-btn-hover: #3c8577;
-    --cancel-btn-color: #c72634;
-    --cancel-btn-hover: #8b1919;
+    --main-border-color: #99aab5;
+    --scroll-track-color: #32363b;
+    --scroll-thumb-color: #23272a;
+    --variation-color: #99aab5;
+    --button-color: #535a6e;
+    --tooltip-color: #40434a;
+    --hover-color: #99aab5;
+    --save-btn-color: #7289da;
+    --save-btn-hover: #9aabe5;
+    --cancel-btn-color: #8f3f43;
+    --cancel-btn-hover: #9a5255;
     --tab-btn-color:  #333; /* About-Tab */
-    --tab-header-color: #7ec8ba;
+    --tab-header-color: #7289da;
     --highlight-color: #7289da;
     --hover-highlight-color: #7289da;
-    --dark-highlight-color: #7289da;
-    --menubar-activetab-color: #7ec8ba;
+    --dark-highlight-color: #4362ce;
+    --menubar-activetab-color: #99aab5;
     --eval-line-color: #ff4400;
-    --quicktour-highlight: #F47174;
+    --quicktour-highlight: #99ccff;
+
+    --nav-background: #312f4a;
+    --color-green: #37dbff;
+
+    --menu-width: 250px;
+    --menu-active-background: #37dbff12;
+    /* document.documentElement.style.setProperty('--main-bg-color', '#17171f')
+    document.documentElement.style.setProperty('--second-bg-color', '#40434a')
+    document.documentElement.style.setProperty('--main-text-color', '#ffffff')
+    document.documentElement.style.setProperty('--main-border-color', '#99aab5')
+    document.documentElement.style.setProperty('--scroll-track-color', '#32363b')
+    document.documentElement.style.setProperty('--scroll-thumb-color', '#23272a')
+    document.documentElement.style.setProperty('--variation-color', '#99aab5')
+    document.documentElement.style.setProperty('--tooltip-color', '#40434a')
+    document.documentElement.style.setProperty('--button-color', '#535a6e')
+    document.documentElement.style.setProperty('--hover-color', '#99aab5')
+    document.documentElement.style.setProperty('--highlight-color', '#7289da')
+    document.documentElement.style.setProperty('--hover-highlight-color', '#7289da')
+    document.documentElement.style.setProperty('--dark-highlight-color', '#4362ce')
+    document.documentElement.style.setProperty('--menubar-activetab-color', '#99aab5')
+    document.documentElement.style.setProperty('--save-btn-color', '#7289da')
+    document.documentElement.style.setProperty('--cancel-btn-color', '#8f3f43')
+    document.documentElement.style.setProperty('--save-btn-hover', '#9aabe5')
+    document.documentElement.style.setProperty('--cancel-btn-hover', '#9a5255')
+    document.documentElement.style.setProperty('--quicktour-highlight', '#99ccff')
+    document.documentElement.style.setProperty('--tab-header-color', '#7289da')
+
+    document.documentElement.style.setProperty('--nav-background', '#222131') */
+
 }
