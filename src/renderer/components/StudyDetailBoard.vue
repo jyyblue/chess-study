@@ -155,6 +155,12 @@ export default {
     SettingsTab,
     EvalPlotButton
   },
+  props: {
+    studyId: {
+      type: String,
+      default: ''
+    }
+  },
   data () {
     return {
       positionInfo: '',
@@ -162,6 +168,7 @@ export default {
       resetAnalysis: false
     }
   },
+
   computed: {
     viewAnalysis () {
       return this.$store.getters.viewAnalysis

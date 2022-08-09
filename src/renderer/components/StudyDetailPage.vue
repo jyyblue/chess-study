@@ -1,6 +1,12 @@
 <template>
   <Layout :title="title">
-    <StudyDetailBoard id="gameboards" />
+    <div class="main-container">
+      <StudyDetailBoard
+        v-if="id !== ''"
+        id="gameboards"
+        :study-id="id"
+      />
+    </div>
   </Layout>
 </template>
 
@@ -23,12 +29,10 @@ export default {
   mounted () {
     const toParams = this.$route.params
     this.id = toParams.id
-    this.initDate()
+    console.log('dddddddddddddddddddd', this.id)
   },
   methods: {
     initDate () {
-      const data = this.$getStudy(this.id)
-      console.log(data)
     }
   }
 }

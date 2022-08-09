@@ -39,7 +39,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { uuid } from 'vue-uuid'
-
+import * as moment from 'moment'
 export default {
   name: 'StudyCreateModal',
   components: { },
@@ -57,11 +57,13 @@ export default {
       console.log('create study')
       const newId = uuid.v4()
       const newStudy = {
-        id: newId,
-        name: this.name
+        uid: newId,
+        name: this.name,
+        created_at: moment().format('YYYY-MM-DD HH:mm:SS'),
+        updated_at: moment().format('YYYY-MM-DD HH:mm:SS')
       }
-      this.$addStudy(newStudy)
-      this.$emit('create')
+      console.log(newStudy)
+      this.$emit('create', newStudy)
       this.$parent.close()
     },
     openingSuit () {

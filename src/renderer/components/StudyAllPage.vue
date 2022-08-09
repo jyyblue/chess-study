@@ -21,7 +21,7 @@
             <input
               class="form-control border-0"
               style="flex: 2 1 0;"
-            />
+            >
             <button
               class="btn btn-info rounded-pill"
               style="flex: 1 1 0;"
@@ -46,7 +46,7 @@
       <div class="mt-4">
         <div class="tb-setting">
           <div class="page-info">
-            <div>Showing <span id="showSize">23</span> of <span id="total">123</span></div>
+            <div>Showing <span id="showSize">{{ total }}</span> of <span id="total">{{ total }}</span></div>
             <div class="small">
               Based your preferences
             </div>
@@ -93,8 +93,8 @@
       </div>
       <div>
         <b-pagination
-          :total="total"
           v-model="current"
+          :total="total"
           :range-before="rangeBefore"
           :range-after="rangeAfter"
           :order="order"
@@ -140,6 +140,8 @@
 import Layout from './Layout'
 import StudyItem from './StudyItem'
 import StudyCreateModal from './StudyCreateModal'
+import electron from 'electron'
+
 export default {
   name: 'StudyAllPage',
   components: {
@@ -149,9 +151,7 @@ export default {
   data () {
     return {
       title: 'All Studies',
-      studies: [
-        
-      ],
+      studies: [],
       current: 1,
       perPage: 10,
       rangeBefore: 1,
@@ -164,7 +164,8 @@ export default {
       prevIcon: 'chevron-left',
       nextIcon: 'chevron-right',
       inputPosition: '',
-      inputDebounce: ''
+      inputDebounce: '',
+      ipc: null
     }
   },
   computed: {
@@ -173,7 +174,14 @@ export default {
     }
   },
   mounted () {
-    this.getAllStudy()
+    this.ipc = electron.ipcRenderer
+    console.log(this.ipc)
+    this.ipc.send('allstudyLoad')
+    const vm = this
+    this.ipc.on('getAllStudy', function (evt, result) {
+      console.log(result, 'result')
+      vm.setAllStudy(result)
+    })
   },
   methods: {
     changePage () {
@@ -191,14 +199,20 @@ export default {
         hasModalCard: true,
         props: {},
         events: {
-          create () {
-            vm.getAllStudy()
+          create (newStudy) {
+            vm.addNewStudy(newStudy)
           }
         }
       })
     },
-    getAllStudy () {
-      this.$getAllStudy()
+
+    addNewStudy (newStudy) {
+      this.ipc.send('addStudy', newStudy)
+    },
+
+    setAllStudy (data) {
+      console.log('call set all study')
+      this.studies = data
     }
   }
 }
