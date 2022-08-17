@@ -163,8 +163,18 @@ export default {
       this.newEngine.send('stop')
       this.newEngine.send('quit')
     } else if (this.engineIndex === 1) {
-      engine.send('quit')
+      engine.send('stop')
     }
+  },
+  mounted () {
+    this.$store.state.fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+    this.$store.dispatch('updateBoard')
+    this.$store.dispatch('position')
+    setTimeout(() => {
+      this.$store.state.fen = 'nrbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+      this.$store.dispatch('updateBoard')
+      this.$store.dispatch('position')
+    }, 100)
   },
   methods: {
     async resetEngine (payload) {

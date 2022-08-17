@@ -4,11 +4,9 @@
 
 
 .dim8x8 .cg-wrap {
-    width: 600px;
-    height: 600px;
+    width: calc(var(--board-width) * 2);
+    height: calc(var(--board-width) * 2);
 }
-
-
 
 .dim8x8 cg-helper {
     width: calc(100% / 8);

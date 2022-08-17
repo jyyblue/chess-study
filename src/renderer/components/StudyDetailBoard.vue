@@ -1,110 +1,41 @@
 <template>
   <!-- All components but menubar -->
   <div id="inner">
-    <div>
-      <div class="main-grid">
+    <div class="row">
+      <div class="col-md-3">
         <div class="chessboard-grid">
-          <PgnBrowser
-            v-if="QuickTourIndex !== 1"
+          <StudyChapterBrowser
             id="pgnbrowser"
           />
-          <PgnBrowser
-            v-else
-            id="pgnbrowser-qt"
-          />
-          <div class="board-grid">
-            <div class="board">
-              <span>
-                <GameInfo
-                  v-if="QuickTourIndex !== 15"
-                  id="gameinfo"
-                />
-                <GameInfo
-                  v-else
-                  id="gameinfo-qt"
-                />
-              </span>
-              <div
-                class="scrollable"
-                @mousewheel.prevent.exact="scroll($event)"
-              >
-                <ChessGround
-                  v-if="QuickTourIndex !== 2"
-                  id="chessboard"
-                  :orientation="orientation"
-                  @onMove="showInfo"
-                />
-                <ChessGround
-                  v-else
-                  id="chessboard-qt"
-                  :orientation="orientation"
-                  @onMove="showInfo"
-                />
-              </div>
-              <EvalBar
-                v-if="QuickTourIndex !== 3"
-                class="evalbar"
-              />
-              <EvalBar
-                v-else
-                class="evalbar-qt"
-              />
-            </div>
-          </div>
-          <div
-            v-if="QuickTourIndex !== 4"
-            id="fen-field"
-          >
-            FEN <input
-              id="lname"
-              type="text"
-              name="lname"
-              placeholder="fen position"
-              :value="fen"
-              :size="setFenSize()"
-              @change="checkValidFEN"
-            >
-          </div>
-          <div
-            v-else
-            id="fen-field-qt"
-          >
-            FEN <input
-              id="lname"
-              type="text"
-              name="lname"
-              placeholder="fen position"
-              :value="fen"
-              :size="setFenSize()"
-              @change="checkValidFEN"
-            >
-          </div>
-          <div
-            v-if="QuickTourIndex !== 5"
-            id="selector-container"
-          >
-            <PieceStyleSelector id="piece-style" />
-            <BoardStyleSelector id="board-style" />
-            <EvalPlotButton id="evalbutton-style" />
-          </div>
-          <div
-            v-else
-            id="selector-container-qt"
-          >
-            <PieceStyleSelector id="piece-style" />
-            <BoardStyleSelector id="board-style" />
-            <EvalPlotButton id="evalbutton-style" />
-          </div>
         </div>
-        <EvalPlot
-          v-if="QuickTourIndex !== 6"
-          id="evalplot"
-        />
-        <EvalPlot
-          v-else
-          id="evalplot-qt"
-        />
-        <div id="right-column">
+      </div>
+      <div class="col-md-6">
+        <div
+          class="scrollable"
+          @mousewheel.prevent.exact="scroll($event)"
+        >
+          <ChessGround
+            id="chessboard"
+            :orientation="orientation"
+            @onMove="showInfo"
+          />
+        </div>
+        <div
+          id="fen-field"
+        >
+          FEN <input
+            id="lname"
+            type="text"
+            name="lname"
+            placeholder="fen position"
+            :value="fen"
+            :size="setFenSize()"
+            @change="checkValidFEN"
+          >
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div id="">
           <AnalysisView
             id="analysisview"
             class="tab"
@@ -128,18 +59,15 @@
 </template>
 
 <script>
-import AnalysisView from './AnalysisView'
+import AnalysisView from './Study/AnalysisView'
 import EvalBar from './EvalBar'
-import ChessGround from './ChessGround'
-import EvalPlot from './EvalPlot'
+import ChessGround from './Study/ChessGround'
 import PieceStyleSelector from './PieceStyleSelector'
 import BoardStyleSelector from './BoardStyleSelector'
 import Vue from 'vue'
-import PgnBrowser from './PgnBrowser.vue'
+import StudyChapterBrowser from './StudyChapterBrowser.vue'
 import SettingsTab from './SettingsTab'
-import EvalPlotButton from './EvalPlotButton'
 import GameInfo from './GameInfo.vue'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'StudyDetailBoard',
@@ -149,11 +77,9 @@ export default {
     ChessGround,
     PieceStyleSelector,
     BoardStyleSelector,
-    EvalPlot,
     GameInfo,
-    PgnBrowser,
-    SettingsTab,
-    EvalPlotButton
+    StudyChapterBrowser,
+    SettingsTab
   },
   props: {
     studyId: {
@@ -200,8 +126,7 @@ export default {
         }
       }
       return undefined
-    },
-    ...mapGetters(['QuickTourIndex'])
+    }
   },
   mounted () { // EventListener für Keyboardinput, ruft direkt die jeweilige Methode auf
     window.addEventListener('keydown', (event) => {
@@ -403,7 +328,7 @@ export default {
     "chessboard analysisview"
     "evalplot analysisview";
 }
-.chessboard-grid {
+/* .chessboard-grid {
   min-width: 1050px;
   grid-area: chessboard;
   display: grid;
@@ -413,7 +338,7 @@ export default {
     "pgnbrowser board-grid"
     "selector board-grid "
     ". fenfield";
-}
+} */
 
 .board-grid {
   grid-area: board-grid;
@@ -498,9 +423,9 @@ input {
 #pgnbrowser {
   grid-area: pgnbrowser;
   border: 1px solid var(--main-border-color);
-  border-radius: 4px;
-  margin-left: 5px;
-  max-height: 490px;
+  border-radius: 10px;
+  background: var(--nav-background);
+  overflow: hidden;
 }
 #pgnbrowser-qt {
   grid-area: pgnbrowser;
@@ -514,7 +439,7 @@ input {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  width: max-content
+  width: 100%;
 }
 
 .board {
@@ -526,10 +451,7 @@ input {
 }
 #chessboard {
   display: inline-block;
-}
-#chessboard-qt {
-  display: inline-block;
-  border: 5px solid var(--quicktour-highlight);
+  width: 100%;
 }
 .bottom-margin {
   margin-bottom: 1.5em;
@@ -550,7 +472,7 @@ input {
   border: 3px solid var(--quicktour-highlight);
 }
 #analysisview {
-  margin-left: 15px;
+  /* margin-left: 15px; */
 }
 #evalplot {
   grid-area: evalplot;

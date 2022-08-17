@@ -5,7 +5,7 @@
         v-if="variant==='crazyhouse'|| variant==='shogi' "
         ref="pockets"
         class="pockets"
-        :class="{ mirror : $store.getters.orientation === &quot;black&quot;, shogi: variant === &quot;shogi&quot; }"
+        :class="{ mirror : $store.getters.orientation === 'black', shogi: variant === 'shogi' }"
       >
         <ChessPocket
           id="chesspocket_top"
@@ -58,8 +58,8 @@
 import { mapGetters } from 'vuex'
 import { Chessground } from 'chessgroundx'
 import * as cgUtil from 'chessgroundx/util'
-import ChessPocket from './ChessPocket'
-import PromotionModal from './PromotionModal.vue'
+import ChessPocket from '../ChessPocket'
+import PromotionModal from '../PromotionModal.vue'
 
 const WHITE = true
 const BLACK = false
@@ -464,7 +464,6 @@ export default {
       document.querySelector('.resizer').style.opacity = 0.8
     },
     stopDragging () {
-      console.log('_________________________')
       document.querySelector('.resizer').style.opacity = 0.0
       this.dragging = false
     },
@@ -628,25 +627,25 @@ export default {
     updatePieceCSS (pieceStyle) {
       const node = this.pieceStyleEl
       if (this.$store.getters.isInternational) {
-        node.href = '../../../../static/piece-css/international/' + pieceStyle + '.css'
+        node.href = '../../../../../static/piece-css/international/' + pieceStyle + '.css'
       } else if (this.$store.getters.isSEA) {
-        node.href = '../../../../static/piece-css/sea/' + pieceStyle + '.css'
+        node.href = '../../../../../static/piece-css/sea/' + pieceStyle + '.css'
       } else if (this.$store.getters.isXiangqi || this.$store.getters.isJanggi) {
-        node.href = '../../../../static/piece-css/xiangqi/' + pieceStyle + '.css'
+        node.href = '../../../../../static/piece-css/xiangqi/' + pieceStyle + '.css'
       } else if (this.$store.getters.isShogi) {
-        node.href = '../../../../static/piece-css/shogi/' + pieceStyle + '.css'
+        node.href = '../../../../../static/piece-css/shogi/' + pieceStyle + '.css'
       }
     },
     updateBoardCSS (boardStyle) {
       const node = this.boardStyleEl
       if (this.$store.getters.isInternational) {
-        node.href = '../../../../static/board-css/international/' + boardStyle + '.css'
+        node.href = '../../../../../static/board-css/international/' + boardStyle + '.css'
       } else if (this.$store.getters.isXiangqi || this.$store.getters.isJanggi) {
-        node.href = '../../../../static/board-css/xiangqi/' + this.variant + '/' + boardStyle + '.css'
+        node.href = '../../../../../static/board-css/xiangqi/' + this.variant + '/' + boardStyle + '.css'
       } else if (this.$store.getters.isSEA) {
-        node.href = '../../../../static/board-css/sea/' + boardStyle + '.css'
+        node.href = '../../../../../static/board-css/sea/' + boardStyle + '.css'
       } else if (this.$store.getters.isShogi) {
-        node.href = '../../../../static/board-css/shogi/' + boardStyle + '.css'
+        node.href = '../../../../../static/board-css/shogi/' + boardStyle + '.css'
       }
       document.body.dispatchEvent(new Event('chessground.resize'))
     },
@@ -947,10 +946,10 @@ export default {
 </script>
 
 <style>
-@import '../assets/chessground.css';
-@import '../assets/dim9x9.css';
-@import '../assets/dim8x8.css';
-@import '../assets/dim9x10.css';
+@import '../../assets/chessground.css';
+@import '../../assets/dim9x9.css';
+@import '../../assets/dim8x8.css';
+@import '../../assets/dim9x10.css';
 
 .resizer{
   padding-left: 15px;

@@ -4,7 +4,7 @@
     <div
       class="study-card-top"
     >
-      <img src="../assets/images/engines/crazyara.png" />
+      <img src="../assets/images/engines/cat1.png" />
       <div
         class="study-card-top-right"
       >

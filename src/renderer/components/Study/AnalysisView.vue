@@ -1,9 +1,9 @@
 <template>
   <div class="analysis">
-    <AnalysisHead
+    <!-- <AnalysisHead
       @resetMultiEngine="resetEngines"
       @updateVariant="removeAllEngines"
-    />
+    /> -->
     <AnalysisContainer
       v-for="engine in Engines"
       ref="analysiscontainer"
@@ -14,7 +14,7 @@
       @move-forward-one="$emit('move-forward-one', 0)"
       @move-to-end="$emit('move-to-end', 0)"
     />
-    <div class="b">
+    <!-- <div class="b">
       <button
         class="buttonRed"
         @click="removeEngine"
@@ -27,7 +27,7 @@
       >
         <b>Add Engine </b>
       </button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -54,12 +54,10 @@ export default {
   methods: {
     removeAllEngines () {
       let i = this.counter
-      for (i; i > 0; i--) {
+      for (i; i > 1; i--) {
         this.Engines.pop()
       }
       this.counter = 1
-      this.Engines.push({ Engine: this.counter })
-      console.log(this.Engines)
       this.$store.dispatch('engineIndex', this.counter)
     },
     resetEngines () {

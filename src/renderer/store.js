@@ -940,22 +940,24 @@ export const store = new Vuex.Store({
     },
     async changeEngine (context, payload) {
       const id = payload
-
+      console.log('change engine')
       // always update selected engines
       const selected = {
         ...context.state.selectedEngines,
         [context.getters.variant]: id
       }
+      console.log(selected)
       context.commit('selectedEngines', selected)
 
+      console.log('context.state.activeEngine', context.state.activeEngine)
       // only change engine when its a different one
-      if (context.state.activeEngine !== id) {
-        context.state.activeEngine = id
-        context.dispatch('runBinary', {
-          binary: context.getters.engineBinary,
-          cwd: context.getters.selectedEngine.cwd
-        })
-      }
+      // if (context.state.activeEngine !== id) {
+      context.state.activeEngine = id
+      context.dispatch('runBinary', {
+        binary: context.getters.engineBinary,
+        cwd: context.getters.selectedEngine.cwd
+      })
+      // }
     },
     async runBinary (context, payload) {
       const { binary, cwd } = payload

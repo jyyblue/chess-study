@@ -24,11 +24,15 @@
     --eval-line-color: #ff4400;
     --quicktour-highlight: #99ccff;
 
-    --nav-background: #312f4a;
+    --nav-background: #222131;
     --color-green: #37dbff;
 
     --menu-width: 250px;
     --menu-active-background: #37dbff12;
+
+    --card-header: #464668;
+    --board-width: 350px;
+
     /* document.documentElement.style.setProperty('--main-bg-color', '#17171f')
     document.documentElement.style.setProperty('--second-bg-color', '#40434a')
     document.documentElement.style.setProperty('--main-text-color', '#ffffff')
