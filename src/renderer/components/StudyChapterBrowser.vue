@@ -201,6 +201,17 @@ export default {
           }
         }
       }
+      if (this.active) {
+        if (this.enginetime >= this.PvEInput) {
+          if (this.lines[0] != null) {
+            if (!this.turn) {
+              this.onClick(this.lines[0])
+            } else {
+              console.log('my turn')
+            }
+          }
+        }
+      }
     }
   },
   created: function () {
@@ -263,10 +274,10 @@ export default {
       this.$store.dispatch('updateBoard')
       this.$store.dispatch('position')
 
-      this.$store.dispatch('goEnginePvE')
+      this.$store.dispatch('goEngine')
     },
     initStudy () {
-      this.$store.dispatch('PvEtrue')
+      this.$store.dispatch('PvEfalse')
       this.$store.dispatch('setActiveTrue')
     },
     updateLines () {
