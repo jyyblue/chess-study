@@ -103,12 +103,16 @@ import { remote } from 'electron'
 import { mapGetters } from 'vuex'
 import { bus } from '../main'
 import AddPgnModal from './AddPgnModal'
-
+import { engine } from '../engine'
 export default {
   name: 'StudyChapterBrowser',
   components: { AddPgnModal },
   data: function () {
     return {
+      lines: [], // array to store engine calculation result
+      currentEngine: 1,
+      showOnlyOnePvLine: false,
+
       AddPgnModal: {
         visible: false,
         title: ''
@@ -137,7 +141,15 @@ export default {
         return this.$store.getters.loadedGames
       }
     },
-    ...mapGetters(['variantOptions'])
+    currentMove () {
+      for (let num = 0; num < this.moves.length; num++) {
+        if (this.moves[num].fen === this.fen) {
+          return this.moves[num]
+        }
+      }
+      return null
+    },
+    ...mapGetters(['variantOptions', 'multipv', 'moves', 'fen', 'engineSettings', 'enginetime', 'PvEInput', 'PvE', 'active', 'turn', 'PvEValue', 'depth', 'seldepth'])
   },
   watch: {
     loadedGames: function () {
@@ -157,6 +169,37 @@ export default {
         })
 
         this.$store.dispatch('rounds', this.rounds)
+      }
+    },
+    engineSettings () {
+      // this.originalMultiPV = this.engineSettings.MultiPV
+      this.updateLines()
+    },
+    multipv () {
+      // get engine calcualtion result list
+      this.updateLines()
+    },
+    enginetime () {
+      // time interval to calculate engine calculation
+      if (this.active && this.PvE && !this.turn) {
+        if (this.PvEValue === 'time') {
+          if (this.enginetime >= this.PvEInput) {
+            if (this.lines[0] != null) {
+              this.onClick(this.lines[0])
+            }
+          }
+        } else if (this.PvEValue === 'nodes') {
+          if (this.enginetime === 60000) {
+            this.onClick(this.lines[0])
+          }
+        } else if (this.PvEValue === 'depth') {
+          if (this.enginetime === 60000) {
+            this.onClick(this.lines[0])
+          }
+          if (this.enginetime >= 5000 && this.depth === this.seldepth) {
+            this.onClick(this.lines[0])
+          }
+        }
       }
     }
   },
@@ -208,11 +251,43 @@ export default {
 
     this.menu = remote.Menu.buildFromTemplate(menuTemplate)
   },
+  beforeDestroy () {
+    this.$store.dispatch('PvEfalse')
+    engine.send('stop')
+  },
   methods: {
     test () {
-      this.$store.state.fen = 'r1bQ2k1/pp6/8/8/P1q5/8/5PPP/R5K1 b - - 2 29'
+      this.initStudy()
+      this.$store.state.moves = []
+      this.$store.state.fen = 'r2Q4/pp5k/3qb2P/8/P7/8/5PP1/R5K1 w - - 1 33'
       this.$store.dispatch('updateBoard')
       this.$store.dispatch('position')
+
+      this.$store.dispatch('goEnginePvE')
+    },
+    initStudy () {
+      this.$store.dispatch('PvEtrue')
+      this.$store.dispatch('setActiveTrue')
+    },
+    updateLines () {
+      // get added line from multipv
+      if (this.currentEngine === 1) {
+        const count = this.engineSettings.MultiPV
+        const lines = this.multipv.filter(el => typeof el.pv === 'string' && el.pv.length > 0)
+        this.lines = lines.concat(Array(count ? Math.max(0, count - lines.length) : 0).fill(null))
+        if (this.showOnlyOnePvLine) {
+          this.lines = this.lines.slice(1, 2)
+        }
+        console.log(this.lines)
+      }
+    },
+    onClick (line) {
+      // add engine calculated result to pgn history
+      this.$store.commit('hoveredpv', -1)
+      const prevMov = this.currentMove
+      this.$store.dispatch('push', { move: line.ucimove, prev: prevMov })
+      console.log('line.ucimove', line.ucimove)
+      console.log('prevMov', prevMov)
     },
     isGameVisible (game) {
       if ((game.headers('White').toLowerCase().indexOf(this.gameFilter.toLowerCase()) !== -1 ||

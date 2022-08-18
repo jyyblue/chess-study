@@ -698,6 +698,7 @@ export const store = new Vuex.Store({
       context.commit('active', true)
     },
     goEnginePvE (context) {
+      console.log('context.getters.PvEParam', context.getters.PvEParam)
       engine.send(context.getters.PvEParam)
       context.commit('setEngineClock')
     },
@@ -1014,6 +1015,10 @@ export const store = new Vuex.Store({
     },
     updateMultiPV (context, payload) {
       // ignore pv updates when engine is expected to be inactive
+      if (context.state.turn === 1) {
+        console.log('-----------------------', payload)
+      }
+
       if (!context.state.active) {
         return
       }

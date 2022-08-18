@@ -265,6 +265,7 @@ export default {
       this.updateBoardCSS(boardStyle)
     },
     multipv () {
+      console.log(this.multipv)
       const multipv = this.multipv
       const shapes = []
       const pieceShapes = []

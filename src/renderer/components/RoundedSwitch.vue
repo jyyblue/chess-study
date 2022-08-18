@@ -24,9 +24,15 @@ export default {
   },
   watch: {
     active () {
-      if (this.active && !this.turn && this.PvE) {
+      console.log('roundswitch. active', this.active)
+      console.log('roundswitch. turn', this.turn)
+      console.log('roundswitch. PvE', this.PvE)
+
+      if (this.active && this.PvE) {
+        console.log('roundswitch. goEnginePvE')
         this.$store.dispatch('goEnginePvE')
       }
+      console.log('roundswitch. goEnginePvE out')
     }
   },
   methods: {
@@ -34,6 +40,7 @@ export default {
       this.engineActive = payload
     },
     onClick () {
+      console.log('hddd')
       if (!this.active) {
         this.$store.dispatch('position')
         if (this.PvE) {
