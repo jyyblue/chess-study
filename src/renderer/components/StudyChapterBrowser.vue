@@ -149,7 +149,10 @@ export default {
       }
       return null
     },
-    ...mapGetters(['variantOptions', 'multipv', 'moves', 'fen', 'engineSettings', 'enginetime', 'PvEInput', 'PvE', 'active', 'turn', 'PvEValue', 'depth', 'seldepth'])
+    ...mapGetters(['variantOptions', 'multipv', 'moves', 'fen', 'engineSettings', 'enginetime',
+      'PvEInput', 'PvE', 'active', 'turn', 'PvEValue', 'depth', 'seldepth',
+      'studyStep', 'currentStudyStep', 'studySolution'
+    ])
   },
   watch: {
     loadedGames: function () {
@@ -207,7 +210,10 @@ export default {
             if (!this.turn) {
               this.onClick(this.lines[0])
             } else {
-              console.log('my turn')
+              // console.log(this.lines[0])
+              this.$store.dispatch('saveStudySolution', this.lines[0])
+              // set new solution is set
+              this.$store.commit('setNewSolutionAvailable', true)
             }
           }
         }
@@ -270,13 +276,16 @@ export default {
     test () {
       this.initStudy()
       this.$store.state.moves = []
-      this.$store.state.fen = 'r2Q4/pp5k/3qb2P/8/P7/8/5PP1/R5K1 w - - 1 33'
+      const fen = 'r2Q4/pp5k/3qb2P/8/P7/8/5PP1/R5K1 w - - 1 33'
+      this.$store.state.fen = fen
+      this.$store.commit('setStudyFen', fen)
       this.$store.dispatch('updateBoard')
       this.$store.dispatch('position')
 
       this.$store.dispatch('goEngine')
     },
     initStudy () {
+      this.$store.commit('initCurrentStudyStep')
       this.$store.dispatch('PvEfalse')
       this.$store.dispatch('setActiveTrue')
     },
@@ -289,7 +298,7 @@ export default {
         if (this.showOnlyOnePvLine) {
           this.lines = this.lines.slice(1, 2)
         }
-        console.log(this.lines)
+        // console.log(this.lines)
       }
     },
     onClick (line) {
@@ -297,8 +306,8 @@ export default {
       this.$store.commit('hoveredpv', -1)
       const prevMov = this.currentMove
       this.$store.dispatch('push', { move: line.ucimove, prev: prevMov })
-      console.log('line.ucimove', line.ucimove)
-      console.log('prevMov', prevMov)
+      // console.log('line.ucimove', line.ucimove)
+      // console.log('prevMov', prevMov)
     },
     isGameVisible (game) {
       if ((game.headers('White').toLowerCase().indexOf(this.gameFilter.toLowerCase()) !== -1 ||

@@ -60,6 +60,7 @@ import { Chessground } from 'chessgroundx'
 import * as cgUtil from 'chessgroundx/util'
 import ChessPocket from '../ChessPocket'
 import PromotionModal from '../PromotionModal.vue'
+import { engine } from '../../engine'
 
 const WHITE = true
 const BLACK = false
@@ -213,7 +214,11 @@ export default {
         return undefined
       }
     },
-    ...mapGetters(['initialized', 'variant', 'multipv', 'hoveredpv', 'redraw', 'pieceStyle', 'boardStyle', 'fen', 'lastFen', 'orientation', 'moves', 'isPast', 'dimensionNumber', 'analysisMode', 'active', 'PvE', 'enginetime', 'resized', 'resized9x9width', 'resized9x9height', 'resized9x10width', 'resized9x10height', 'dimNumber'])
+    ...mapGetters(['initialized', 'variant', 'multipv', 'hoveredpv', 'redraw', 'pieceStyle',
+      'boardStyle', 'fen', 'lastFen', 'orientation', 'moves', 'isPast', 'dimensionNumber',
+      'analysisMode', 'active', 'PvE', 'enginetime', 'resized', 'resized9x9width', 'resized9x9height',
+      'resized9x10width', 'resized9x10height', 'dimNumber',
+      'newSolution', 'studySolution', 'studyStep', 'currentStudyStep'])
   },
   watch: {
     dimensionNumber () {
@@ -265,8 +270,8 @@ export default {
       this.updateBoardCSS(boardStyle)
     },
     multipv () {
-      console.log(this.multipv)
-      console.log(this.PvE)
+      // console.log(this.multipv)
+      // console.log(this.PvE)
       const multipv = this.multipv
       const shapes = []
       const pieceShapes = []
@@ -806,6 +811,7 @@ export default {
         const pieces = { 'p-piece': 'P', 'n-piece': 'N', 'b-piece': 'B', 'r-piece': 'R', 'q-piece': 'Q', 's-piece': 'S', 'g-piece': 'G', 'l-piece': 'L' }
         const move = pieces[role] + '@' + key
         const prevMov = this.currentMove
+        console.log('afterDrag', move)
         if (this.$store.getters.legalMoves.includes(move)) {
           this.$store.dispatch('push', { move: move, prev: prevMov })
           this.updateHand()
@@ -833,12 +839,40 @@ export default {
         } else {
           this.lastMoveSan = this.$store.getters.sanMove(uciMove)
           const prevMov = this.currentMove
+          console.log('changeTurn', uciMove)
+          console.log('studySolution', this.studySolution)
+          console.log('currentStudyStep', this.currentStudyStep)
+          console.log('studyStep', this.studyStep)
           this.$store.dispatch('push', { move: uciMove, prev: prevMov })
+          console.log('my move', { move: uciMove, prev: prevMov })
           this.updateHand()
           this.afterMove()
+          if (this.studyStep > this.currentStudyStep) {
+            if (uciMove === this.studySolution.ucimove) {
+              this.$store.commit('increaseCurrentStudyStep')
+            } else {
+              // stop engine
+              engine.send('stop')
+              setTimeout(() => {
+                this.deleteWrongStudyMove()
+              }, 400)
+            }
+          }
           console.log(this.turn)
         }
       }
+    },
+    deleteWrongStudyMove () {
+      const cMove = this.currentMove
+      this.$store.dispatch('deleteFromMoves', cMove)
+      if (cMove.prev === undefined) {
+        this.$store.dispatch('fen', this.$store.getters.studyFen)
+      } else {
+        const _fen = cMove.prev.fen
+        this.$store.dispatch('fen', _fen)
+      }
+      this.$store.dispatch('updateBoard')
+      this.$store.dispatch('position')
     },
     updatePocket (pocket, pocketPieces, color) {
       for (let idx = 0; idx < pocketPieces.length; ++idx) {
@@ -883,6 +917,7 @@ export default {
       events.fen = this.fen
       events.history = [this.lastMoveSan]
       // this.$emit('onMove', events)
+      console.log(this.fen)
       this.$store.dispatch('lastFen', this.fen)
     },
     updateBoard () {

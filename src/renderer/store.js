@@ -217,7 +217,13 @@ export const store = new Vuex.Store({
     ],
     clock: null,
     // left menu
-    showMenu: false
+    showMenu: false,
+    // study variables
+    studyStep: 2, // total question number in study
+    currentStudyStep: 0, // current qustion number
+    studySolution: null, // engine calculated best solution
+    newSolution: false, // flag engine get new solution
+    studyFen: ''
   },
   mutations: { // sync
     increaseEngineNumber (state) {
@@ -261,7 +267,9 @@ export const store = new Vuex.Store({
       for (const index in payload.next) {
         this.commit('deleteFromMoves', payload.next[index])
       }
+      console.log('before', state.moves)
       state.moves.splice(state.moves.indexOf(payload), 1)
+      console.log('after', state.moves)
     },
     legalMoves (state, payload) {
       state.legalMoves = payload
@@ -552,6 +560,22 @@ export const store = new Vuex.Store({
         isShow = !state.showMenu
       }
       state.showMenu = isShow
+    },
+    // study mutation
+    increaseCurrentStudyStep (state) {
+      state.currentStudyStep++
+    },
+    initCurrentStudyStep (state) {
+      state.currentStudyStep = 0
+    },
+    setStudySolution (state, payload) {
+      state.studySolution = payload
+    },
+    setNewSolutionAvailable (state, payload) {
+      state.newSolution = payload
+    },
+    setStudyFen (state, payload) {
+      state.studyFen = payload
     }
   },
   actions: { // async
@@ -1159,6 +1183,9 @@ export const store = new Vuex.Store({
     },
     saveSettings (context) {
       context.commit('saveSettings')
+    },
+    saveStudySolution (context, payload) {
+      context.commit('setStudySolution', payload)
     }
   },
   getters: {
@@ -1473,6 +1500,22 @@ export const store = new Vuex.Store({
     },
     muteButton (state) {
       return state.muteButton
+    },
+    // study getters
+    currentStudyStep (state) {
+      return state.currentStudyStep
+    },
+    studyStep (state) {
+      return state.studyStep
+    },
+    studySolution (state) {
+      return state.studySolution
+    },
+    newSolution (state) {
+      return state.newSolution
+    },
+    studyFen (state) {
+      return state.studyFen
     }
   }
 })
