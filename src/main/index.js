@@ -62,12 +62,26 @@ function initDB () {
       })
     }
   })
+
+  _knex.schema.hasTable('study_chapter').then(function (exists) {
+    if (!exists) {
+      return _knex.schema.createTable('study_chapter', function (t) {
+        t.increments()
+        t.string('uid')
+        t.string('studyId')
+        t.string('name')
+        t.string('fen')
+        t.timestamps()
+      })
+    }
+  })
 }
 app.on('ready', () => {
   createWindow()
   initDB()
   console.log('app ready')
 
+  // send all study list
   ipcMain.on('allstudyLoad', function () {
     const result = _knex.select('*').from('studies')
     result.then(function (rows) {
@@ -75,6 +89,7 @@ app.on('ready', () => {
     })
   })
 
+  // add study to db
   ipcMain.on('addStudy', function (event, newStudy) {
     console.log(newStudy)
     const result = _knex('studies').insert(newStudy)
@@ -83,6 +98,41 @@ app.on('ready', () => {
       const result2 = _knex.select('*').from('studies')
       result2.then(function (rows) {
         mainWindow.webContents.send('getAllStudy', rows)
+      })
+    })
+  })
+
+  // get chapter list for study
+  ipcMain.on('loadStudyChapterList', function (event, _studyId) {
+    const result = _knex.select('*').from('study_chapter').where({ studyId: _studyId })
+    result.then(function (rows) {
+      mainWindow.webContents.send('getStudyChapterList', rows)
+    })
+  })
+
+  // add chapter to db
+  ipcMain.on('addStudyChapter', function (event, newStudy) {
+    console.log(newStudy)
+    const _studyId = newStudy.studyId
+    const result = _knex('study_chapter').insert(newStudy)
+    result.then(function (ret) {
+      console.log('addStudyChapter', ret)
+      const result2 = _knex.select('*').from('study_chapter').where({ studyId: _studyId })
+      result2.then(function (rows) {
+        mainWindow.webContents.send('getStudyChapterList', rows)
+      })
+    })
+  })
+
+  // delete chapter from db
+  ipcMain.on('deleteStudyChapter', function (event, payload) {
+    const chapterId = payload.uid
+    const studyId = payload.studyId
+    const result = _knex('study_chapter').where('uid', chapterId).del()
+    result.then(function (ret) {
+      const result = _knex.select('*').from('study_chapter').where({ studyId: studyId })
+      result.then(function (rows) {
+        mainWindow.webContents.send('getStudyChapterList', rows)
       })
     })
   })

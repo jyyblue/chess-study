@@ -3,11 +3,12 @@
   <div id="inner">
     <div class="row">
       <div class="col-md-3">
-        <div class="chessboard-grid">
+        <!-- <div class="chessboard-grid">
           <StudyChapterBrowser
             id="pgnbrowser"
+            :study-id="studyId"
           />
-        </div>
+        </div> -->
       </div>
       <div class="col-md-6">
         <div
@@ -35,7 +36,7 @@
         </div>
       </div>
       <div class="col-md-3">
-        <div id="">
+        <!-- <div id="">
           <AnalysisView
             id="analysisview"
             class="tab"
@@ -52,34 +53,26 @@
             class="tab"
             :class="{ visible: !viewAnalysis }"
           />
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import AnalysisView from './Study/AnalysisView'
-import EvalBar from './EvalBar'
+// import AnalysisView from './Study/AnalysisView'
 import ChessGround from './Study/ChessGround'
-import PieceStyleSelector from './PieceStyleSelector'
-import BoardStyleSelector from './BoardStyleSelector'
 import Vue from 'vue'
-import StudyChapterBrowser from './StudyChapterBrowser.vue'
-import SettingsTab from './SettingsTab'
-import GameInfo from './GameInfo.vue'
+// import StudyChapterBrowser from './StudyChapterBrowser.vue'
+// import SettingsTab from './SettingsTab'
 
 export default {
   name: 'StudyDetailBoard',
   components: {
-    AnalysisView,
-    EvalBar,
-    ChessGround,
-    PieceStyleSelector,
-    BoardStyleSelector,
-    GameInfo,
-    StudyChapterBrowser,
-    SettingsTab
+    // AnalysisView,
+    ChessGround
+    // StudyChapterBrowser,
+    // SettingsTab
   },
   props: {
     studyId: {
@@ -129,6 +122,7 @@ export default {
     }
   },
   mounted () { // EventListener für Keyboardinput, ruft direkt die jeweilige Methode auf
+    console.log(this.studyId)
     window.addEventListener('keydown', (event) => {
       const keyName = event.key
       if (event.target.nodeName.toLowerCase() !== 'input') {

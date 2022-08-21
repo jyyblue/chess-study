@@ -61,12 +61,7 @@ import { mapGetters } from 'vuex'
 
 // import AnalysisEvalRow from './AnalysisEvalRow'
 import JumpButtons from './JumpButtons'
-import EngineStats from '../EngineStats'
-import PVLines from '../PVLines'
-import EngineConsole from '../EngineConsole'
 import MoveHistoryNode from './MoveHistoryNode'
-import RoundedSwitch from '../RoundedSwitch'
-import EngineSelect from '../EngineSelect'
 import UserTurn from './UserTurn'
 import ffish from 'ffish'
 
@@ -75,14 +70,9 @@ export default {
   components: {
     // AnalysisEvalRow,
     JumpButtons,
-    EngineStats,
-    PVLines,
     MoveHistoryNode,
-    RoundedSwitch,
-    EngineSelect,
-    UserTurn,
     UserTurn
-},
+  },
   data () {
     return {
       currentVariant: null,
@@ -182,14 +172,14 @@ export default {
     // this.$refs.console.setEngineIndex(this.engineID)
     // this.$refs.enginestats.fillID(this.engineID)
     // this.$refs.engineselect.setEngineIndex(this.engineIndex)
-    this.$store.state.fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
-    this.$store.dispatch('updateBoard')
-    this.$store.dispatch('position')
+    // this.$store.state.fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+    // this.$store.dispatch('updateBoard')
+    // this.$store.dispatch('position')
     setTimeout(() => {
       this.$store.state.fen = 'nrbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
       this.$store.dispatch('updateBoard')
       this.$store.dispatch('position')
-    }, 100)
+    }, 1000)
   },
   methods: {
     async resetThisEngine () {

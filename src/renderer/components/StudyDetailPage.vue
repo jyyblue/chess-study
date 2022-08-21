@@ -29,7 +29,6 @@ export default {
   mounted () {
     const toParams = this.$route.params
     this.id = toParams.id
-    console.log('dddddddddddddddddddd', this.id)
   },
   methods: {
     initDate () {

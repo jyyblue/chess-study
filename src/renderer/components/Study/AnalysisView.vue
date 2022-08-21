@@ -32,13 +32,11 @@
 </template>
 
 <script>
-import AnalysisHead from './AnalysisHead'
 import AnalysisContainer from './AnalysisContainer.vue'
 
 export default {
   name: 'AnalysisView',
   components: {
-    AnalysisHead,
     AnalysisContainer
   },
   data () {

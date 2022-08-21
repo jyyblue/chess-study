@@ -20,12 +20,11 @@
         <i
           id="icon"
           class="icon mdi mdi-filter-menu-outline"
-          @click="test()"
         />
         <i
           id="icon"
           class="icon mdi mdi-plus-box-outline"
-          @click="openAddPgnModal()"
+          @click="openCreateModal()"
         />
       </div>
       <div>
@@ -36,6 +35,26 @@
         />
       </div>
       <div class="pgnList">
+        <div
+          v-for="(chapter) in chapterList"
+          :key="`${chapter.name} ${chapter.fen}`"
+        >
+          <div
+            class="browserelement roundseperator"
+            :class="{ active : selectedGame && selectedGame.headers('Round') === chapter.name && selectedGame.headers('Event') === chapter.name }"
+            :title="chapter.name"
+            @click="selectChapter(chapter)"
+          >
+            Round {{ chapter.name }}
+            <span
+              slot="extra"
+              class="icon mdi mdi-delete"
+              style="float: right;"
+              @click="deleteChapter(chapter)"
+            />
+          </div>
+        </div>
+
         <template v-if="groupByRound">
           <div
             v-for="(round) in rounds"
@@ -99,20 +118,29 @@
 </template>
 
 <script>
-import { remote } from 'electron'
+import electron, { remote } from 'electron'
 import { mapGetters } from 'vuex'
 import { bus } from '../main'
 import AddPgnModal from './AddPgnModal'
 import { engine } from '../engine'
+import StudyChapterCreateModal from './StudyChapterCreateModal'
+
 export default {
   name: 'StudyChapterBrowser',
   components: { AddPgnModal },
+  props: {
+    studyId: {
+      type: String,
+      default: ''
+    }
+  },
   data: function () {
     return {
       lines: [], // array to store engine calculation result
       currentEngine: 1,
       showOnlyOnePvLine: false,
 
+      chapterList: [],
       AddPgnModal: {
         visible: false,
         title: ''
@@ -122,7 +150,8 @@ export default {
       groupByRound: true,
       displayUnsupported: false,
       menu: undefined,
-      contextMenuEvents: undefined
+      contextMenuEvents: undefined,
+      ipc: null
     }
   },
   computed: {
@@ -210,10 +239,13 @@ export default {
             if (!this.turn) {
               this.onClick(this.lines[0])
             } else {
-              // console.log(this.lines[0])
-              this.$store.dispatch('saveStudySolution', this.lines[0])
-              // set new solution is set
-              this.$store.commit('setNewSolutionAvailable', true)
+              console.log('this.enginetime', this.enginetime)
+              if (this.enginetime < 5000) {
+                // console.log(this.lines[0])
+                this.$store.dispatch('saveStudySolution', this.lines[0])
+                // set new solution is set
+                this.$store.commit('setNewSolutionAvailable', true)
+              }
             }
           }
         }
@@ -272,22 +304,68 @@ export default {
     this.$store.dispatch('PvEfalse')
     engine.send('stop')
   },
-  methods: {
-    test () {
+  mounted () {
+    this.ipc = electron.ipcRenderer
+    console.log(this.ipc)
+    this.ipc.send('loadStudyChapterList', this.studyId)
+    const vm = this
+    this.ipc.on('getStudyChapterList', function (evt, result) {
+      console.log(result, 'result')
+      vm.setStudyChapterList(result)
+    })
+    setTimeout(() => {
       this.initStudy()
-      this.$store.state.moves = []
-      const fen = 'r2Q4/pp5k/3qb2P/8/P7/8/5PP1/R5K1 w - - 1 33'
-      this.$store.state.fen = fen
-      this.$store.commit('setStudyFen', fen)
-      this.$store.dispatch('updateBoard')
-      this.$store.dispatch('position')
-
-      this.$store.dispatch('goEngine')
+    }, 1000)
+  },
+  methods: {
+    setStudyChapterList (data) {
+      // get chapters for study
+      console.log('call set all study')
+      this.chapterList = data
     },
-    initStudy () {
-      this.$store.commit('initCurrentStudyStep')
-      this.$store.dispatch('PvEfalse')
-      this.$store.dispatch('setActiveTrue')
+    openCreateModal () {
+      const vm = this
+      this.$buefy.modal.open({
+        component: StudyChapterCreateModal,
+        // fullScreen: true,
+        parent: this,
+        hasModalCard: true,
+        props: {
+          studyId: this.studyId
+        },
+        events: {
+          create (newChapter) {
+            vm.addNewChapter(newChapter)
+          }
+        }
+      })
+    },
+    addNewChapter (newChapter) {
+      this.ipc.send('addStudyChapter', newChapter)
+    },
+    async selectChapter (chapter) {
+      await this.initStudy()
+      setTimeout(() => {
+        const fen = chapter.fen
+        this.$store.state.fen = fen
+
+        this.$store.commit('setStudyFen', fen)
+        this.$store.dispatch('updateBoard')
+        this.$store.dispatch('position')
+      }, 100)
+    },
+    deleteChapter (chapter) {
+      const chapterId = chapter.uid
+      this.ipc.send('deleteStudyChapter', chapterId)
+    },
+
+    async initStudy () {
+      await engine.send('stop')
+      await this.$store.commit('newBoard')
+      await this.$store.commit('initCurrentStudyStep')
+      await this.$store.dispatch('PvEfalse')
+      await this.$store.dispatch('setActiveTrue')
+      this.$store.dispatch('goEngine')
     },
     updateLines () {
       // get added line from multipv

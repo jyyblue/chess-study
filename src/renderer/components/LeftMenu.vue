@@ -84,7 +84,7 @@ export default {
   watch: {
     showMenu: {
       handler (newVal) {
-        console.log('showmenu', newVal)
+        // console.log('showmenu', newVal)
       },
       immediate: true // make this watch function is called when component created
     }

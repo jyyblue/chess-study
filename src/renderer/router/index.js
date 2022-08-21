@@ -8,7 +8,7 @@ export default new Router({
     {
       path: '/',
       name: 'landing-page',
-      component: require('@/components/LandingPage').default
+      component: require('@/components/StudyAllPage').default
     },
     {
       path: '/study/all',
@@ -22,7 +22,7 @@ export default new Router({
     },
     {
       path: '*',
-      redirect: '/'
+      redirect: '/study/all'
     }
   ]
 })
