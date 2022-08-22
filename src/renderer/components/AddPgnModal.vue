@@ -128,7 +128,7 @@ export default {
       }
       let numOfUnparseableGames = 0
       let m
-      const maxGames = 30 // stops afer parsing 30 games, since large pgns crash liGround. reason so far not clear
+      const maxGames = 30 // stops afer parsing 30 games, since large pgns crash ChessStudy. reason so far not clear
       let currentGameCount = 0
       while ((m = regex.exec(data)) !== null && currentGameCount !== maxGames) { // parses over all games in the selected pgn file or String and pushes them onto the games array
         if (m.index === regex.lastIndex) {

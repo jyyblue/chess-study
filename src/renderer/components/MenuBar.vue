@@ -202,7 +202,7 @@ export default {
     openAboutTabModal () {
       this.modal = {
         visible: true,
-        title: 'LiGround'
+        title: 'ChessStudy'
       }
     },
     toggleMenu () {

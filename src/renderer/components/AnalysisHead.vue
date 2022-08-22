@@ -1,6 +1,6 @@
 <template>
   <div class="ceval grid-parent">
-    LiGround
+    ChessStudy
     <Multiselect
       v-if="QuickTourIndex !== 7"
       class="multiselect"

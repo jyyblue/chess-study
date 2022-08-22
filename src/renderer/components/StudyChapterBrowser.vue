@@ -314,7 +314,7 @@ export default {
       vm.setStudyChapterList(result)
     })
     setTimeout(() => {
-      this.initStudy()
+      this.selectChapter()
     }, 1000)
   },
   methods: {
@@ -343,15 +343,19 @@ export default {
     addNewChapter (newChapter) {
       this.ipc.send('addStudyChapter', newChapter)
     },
-    async selectChapter (chapter) {
+    async selectChapter (chapter = null, flag = true) {
       await this.initStudy()
+
       setTimeout(() => {
-        const fen = chapter.fen
+        const fen = chapter ? chapter.fen : this.$store.state.fen
         this.$store.state.fen = fen
 
-        this.$store.commit('setStudyFen', fen)
-        this.$store.dispatch('updateBoard')
-        this.$store.dispatch('position')
+        if (flag === true) {
+          this.$store.commit('setStudyFen', fen)
+          this.$store.dispatch('updateBoard')
+          this.$store.dispatch('position')
+        }
+        this.$store.dispatch('goEngine')
       }, 100)
     },
     deleteChapter (chapter) {
@@ -360,12 +364,12 @@ export default {
     },
 
     async initStudy () {
+      console.log('he')
       await engine.send('stop')
       await this.$store.commit('newBoard')
       await this.$store.commit('initCurrentStudyStep')
       await this.$store.dispatch('PvEfalse')
       await this.$store.dispatch('setActiveTrue')
-      this.$store.dispatch('goEngine')
     },
     updateLines () {
       // get added line from multipv

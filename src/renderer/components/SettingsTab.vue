@@ -1,7 +1,7 @@
 <template>
   <div class="settings">
     <div class="panel">
-      <span class="title">LiGround Settings</span>
+      <span class="title">ChessStudy Settings</span>
       <div class="switch-container">
         <span>Dark Mode</span>
         <DarkModeSwitch />

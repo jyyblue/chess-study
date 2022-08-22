@@ -176,10 +176,11 @@ export default {
     // this.$store.dispatch('updateBoard')
     // this.$store.dispatch('position')
     setTimeout(() => {
-      this.$store.state.fen = 'nrbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+      // this.$store.state.fen = 'nrbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+      this.$store.state.fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
       this.$store.dispatch('updateBoard')
       this.$store.dispatch('position')
-    }, 1000)
+    }, 100)
   },
   methods: {
     async resetThisEngine () {

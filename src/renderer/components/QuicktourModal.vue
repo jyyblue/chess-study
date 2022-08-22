@@ -35,7 +35,7 @@
             style="white-space: pre-line"
           >
             <span>
-              {{ 'Welcome to our little QuickGuide to LiGround' }}
+              {{ 'Welcome to our little QuickGuide to ChessStudy' }}
             </span>
           </div>
         </div>

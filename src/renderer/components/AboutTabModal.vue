@@ -107,14 +107,6 @@ export default {
   methods: {
     cancel () {
       this.$emit('close')
-    },
-    openGitHub () {
-      shell.openExternal('https://github.com/ml-research/liground')
-    },
-    openLicense () {
-      shell.openExternal(
-        'https://github.com/ml-research/liground/blob/master/LICENSE'
-      )
     }
   }
 }
