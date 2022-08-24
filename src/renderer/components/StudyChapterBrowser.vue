@@ -240,7 +240,7 @@ export default {
               this.onClick(this.lines[0])
             } else {
               console.log('this.enginetime', this.enginetime)
-              if (this.enginetime < 5000) {
+              if (this.enginetime < 2000) {
                 // console.log(this.lines[0])
                 this.$store.dispatch('saveStudySolution', this.lines[0])
                 // set new solution is set

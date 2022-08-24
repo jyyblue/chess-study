@@ -94,7 +94,6 @@
 </template>
 
 <script>
-import { shell } from 'electron'
 
 export default {
   name: 'AboutTabModal',

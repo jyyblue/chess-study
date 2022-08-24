@@ -85,6 +85,7 @@ export default {
   },
   data () {
     return {
+      wrongMove: false,
       boardWidth: 0,
       boardHeight: 0,
       startingPoint: 640,
@@ -216,8 +217,8 @@ export default {
     ...mapGetters(['initialized', 'variant', 'multipv', 'hoveredpv', 'redraw', 'pieceStyle',
       'boardStyle', 'fen', 'lastFen', 'orientation', 'moves', 'isPast', 'dimensionNumber',
       'analysisMode', 'active', 'PvE', 'enginetime', 'resized', 'resized9x9width', 'resized9x9height',
-      'resized9x10width', 'resized9x10height', 'dimNumber',
-      'newSolution', 'studySolution', 'studyStep', 'currentStudyStep'])
+      'resized9x10width', 'resized9x10height', 'dimNumber', 'PvEInput',
+      'newSolution', 'studySolution', 'studyStep', 'currentStudyStep', 'showSolution'])
   },
   watch: {
     dimensionNumber () {
@@ -270,52 +271,109 @@ export default {
     },
     multipv () {
       // console.log(this.multipv)
-      const multipv = this.multipv
-      const shapes = []
-      const pieceShapes = []
-      for (const [i, pvline] of multipv.entries()) {
-        if (pvline && 'ucimove' in pvline && pvline.ucimove.length > 0) {
-          const lineWidth = 2 + ((multipv.length - i) / multipv.length) * 8
-          const move = pvline.ucimove
-          let orig = move.substring(0, 2)
-          let dest = move.substring(2, 4)
-          let drawShape
-          if (this.dimensionNumber === 3) {
-            const extract = this.extractMoves(move)
-            orig = extract[0].replace('10', ':')
-            dest = extract[1].replace('10', ':')
-          }
-          if (move.includes('@')) {
-            const pieceType = move[0].toLowerCase()
-            const pieceConv = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' }
-            pieceShapes.unshift({
-              orig: dest,
-              dest: dest,
-              brush: 'paleBlue',
-              modifiers: { lineWidth },
-              piece: {
-                role: pieceConv[pieceType],
-                color: this.turn
+      // const multipv = this.multipv
+      // const shapes = []
+      // const pieceShapes = []
+      // for (const [i, pvline] of multipv.entries()) {
+      //   if (pvline && 'ucimove' in pvline && pvline.ucimove.length > 0) {
+      //     const lineWidth = 2 + ((multipv.length - i) / multipv.length) * 8
+      //     const move = pvline.ucimove
+      //     let orig = move.substring(0, 2)
+      //     let dest = move.substring(2, 4)
+      //     let drawShape
+      //     if (this.dimensionNumber === 3) {
+      //       const extract = this.extractMoves(move)
+      //       orig = extract[0].replace('10', ':')
+      //       dest = extract[1].replace('10', ':')
+      //     }
+      //     if (move.includes('@')) {
+      //       const pieceType = move[0].toLowerCase()
+      //       const pieceConv = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' }
+      //       pieceShapes.unshift({
+      //         orig: dest,
+      //         dest: dest,
+      //         brush: 'paleBlue',
+      //         modifiers: { lineWidth },
+      //         piece: {
+      //           role: pieceConv[pieceType],
+      //           color: this.turn
+      //         }
+      //       })
+      //       drawShape = { orig: dest, brush: 'paleBlue', modifiers: { lineWidth } }
+      //     } else {
+      //       drawShape = { orig, dest, brush: 'paleBlue', modifiers: { lineWidth } }
+      //     }
+      //     // adjust color if pv line is hovered
+      //     if (i === this.hoveredpv) {
+      //       drawShape.brush = 'blue'
+      //     }
+      //     if (i === 0) {
+      //       drawShape.brush = 'yellow'
+      //     }
+      //     // put item in front of list, so that the best move is drawn last
+      //     shapes.unshift(drawShape)
+      //   }
+      // }
+      // this.pieceShapes = pieceShapes
+      // this.shapes = shapes
+      // this.drawShapes()
+    },
+    enginetime () {
+      if (this.active) {
+        if (this.enginetime >= this.PvEInput) {
+          if (this.turn === 'white') {
+            if (this.enginetime < 2000 && !this.wrongMove) {
+              console.log('enginetime')
+              const multipv = this.multipv
+              const shapes = []
+              const pieceShapes = []
+              for (const [i, pvline] of multipv.entries()) {
+                if (pvline && 'ucimove' in pvline && pvline.ucimove.length > 0) {
+                  const lineWidth = 2 + ((multipv.length - i) / multipv.length) * 8
+                  const move = pvline.ucimove
+                  let orig = move.substring(0, 2)
+                  let dest = move.substring(2, 4)
+                  let drawShape
+                  if (this.dimensionNumber === 3) {
+                    const extract = this.extractMoves(move)
+                    orig = extract[0].replace('10', ':')
+                    dest = extract[1].replace('10', ':')
+                  }
+                  if (move.includes('@')) {
+                    const pieceType = move[0].toLowerCase()
+                    const pieceConv = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' }
+                    pieceShapes.unshift({
+                      orig: dest,
+                      dest: dest,
+                      brush: 'paleBlue',
+                      modifiers: { lineWidth },
+                      piece: {
+                        role: pieceConv[pieceType],
+                        color: this.turn
+                      }
+                    })
+                    drawShape = { orig: dest, brush: 'paleBlue', modifiers: { lineWidth } }
+                  } else {
+                    drawShape = { orig, dest, brush: 'paleBlue', modifiers: { lineWidth } }
+                  }
+                  // adjust color if pv line is hovered
+                  if (i === this.hoveredpv) {
+                    drawShape.brush = 'blue'
+                  }
+                  if (i === 0) {
+                    drawShape.brush = 'yellow'
+                  }
+                  // put item in front of list, so that the best move is drawn last
+                  shapes.unshift(drawShape)
+                }
               }
-            })
-            drawShape = { orig: dest, brush: 'paleBlue', modifiers: { lineWidth } }
-          } else {
-            drawShape = { orig, dest, brush: 'paleBlue', modifiers: { lineWidth } }
+              this.pieceShapes = pieceShapes
+              this.shapes = shapes
+              // this.drawShapes()
+            }
           }
-          // adjust color if pv line is hovered
-          if (i === this.hoveredpv) {
-            drawShape.brush = 'blue'
-          }
-          if (i === 0) {
-            drawShape.brush = 'yellow'
-          }
-          // put item in front of list, so that the best move is drawn last
-          shapes.unshift(drawShape)
         }
       }
-      this.pieceShapes = pieceShapes
-      this.shapes = shapes
-      this.drawShapes()
     },
     hoveredpv () {
       const index = this.shapes.length - this.hoveredpv - 1
@@ -373,6 +431,14 @@ export default {
       })
       this.updateBoard()
       this.isPromotionModalVisible = false
+    },
+    showSolution () {
+      console.log(this.shapes)
+      if (this.studyStep > this.currentStudyStep) {
+        if (this.showSolution) {
+          this.drawShapes()
+        }
+      }
     }
   },
   mounted () {
@@ -820,6 +886,7 @@ export default {
     },
     changeTurn () {
       return (orig, dest, metadata) => {
+        this.wrongMove = false
         let uciMove = orig + dest
         if (this.dimensionNumber === 3) {
           uciMove = uciMove.replaceAll(':', '10') // Convert the ':' back to '10'
@@ -847,9 +914,17 @@ export default {
           this.afterMove()
           if (this.studyStep > this.currentStudyStep) {
             if (uciMove === this.studySolution.ucimove) {
+              // correct move
               this.$store.commit('increaseCurrentStudyStep')
+              this.$store.commit('setShowSolution', false)
+              this.$store.commit('setNewSolutionAvailable', false)
+
+              this.pieceShapes = []
+              this.shapes = []
+              this.drawShapes()
             } else if (this.currentStudyStep !== null) {
-              // stop engine
+              // stop back wrong step
+              this.wrongMove = true
               engine.send('stop')
               setTimeout(() => {
                 this.deleteWrongStudyMove()

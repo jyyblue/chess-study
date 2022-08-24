@@ -223,6 +223,7 @@ export const store = new Vuex.Store({
     currentStudyStep: 0, // current qustion number
     studySolution: null, // engine calculated best solution
     newSolution: false, // flag engine get new solution
+    showSolution: false, // show / hide solution in board
     studyFen: ''
   },
   mutations: { // sync
@@ -573,6 +574,9 @@ export const store = new Vuex.Store({
     },
     setNewSolutionAvailable (state, payload) {
       state.newSolution = payload
+    },
+    setShowSolution (state, payload) {
+      state.showSolution = payload
     },
     setStudyFen (state, payload) {
       state.studyFen = payload
@@ -1513,6 +1517,9 @@ export const store = new Vuex.Store({
     },
     newSolution (state) {
       return state.newSolution
+    },
+    showSolution (state) {
+      return state.showSolution
     },
     studyFen (state) {
       return state.studyFen

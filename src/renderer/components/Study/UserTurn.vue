@@ -11,10 +11,22 @@
       <h4 style="font-size: 0.6rem;">
         Find the best move for white
       </h4>
-      <h4 class="btn_solution">
+      <button
+        v-if="newSolution && studyStep > currentStudyStep"
+        class="btn btn_solution"
+        @click="onClick()"
+      >
         <i class="fa fa-check" />
         View Solution
-      </h4>
+      </button>
+      <button
+        v-if="!newSolution || studyStep <= currentStudyStep"
+        disabled
+        class="btn btn_solution"
+      >
+        <i class="fa fa-check" />
+        View Solution
+      </button>
     </div>
   </div>
 </template>
@@ -23,6 +35,7 @@
 // raw vue component
 // TODO: use HookIcon component?
 // import HookIcon from 'mdi-vue/Hook.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'UserTurn',
@@ -46,6 +59,15 @@ export default {
     },
     fen () {
       return this.$store.getters.fen
+    },
+    ...mapGetters(['showSolution', 'newSolution',
+      'studyStep', 'currentStudyStep'
+    ])
+  },
+  methods: {
+    onClick () {
+      console.log('------------')
+      this.$store.commit('setShowSolution', true)
     }
   }
 }
