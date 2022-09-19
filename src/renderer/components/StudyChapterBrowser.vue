@@ -180,7 +180,7 @@ export default {
     },
     ...mapGetters(['variantOptions', 'multipv', 'moves', 'fen', 'engineSettings', 'enginetime',
       'PvEInput', 'PvE', 'active', 'turn', 'PvEValue', 'depth', 'seldepth',
-      'studyStep', 'currentStudyStep', 'studySolution'
+      'studyStep', 'currentStudyStep', 'studySolution', 'studyEngineOn'
     ])
   },
   watch: {
@@ -236,7 +236,7 @@ export default {
       if (this.active) {
         if (this.enginetime >= this.PvEInput) {
           if (this.lines[0] != null) {
-            if (!this.turn) {
+            if (!this.turn ) {
               this.onClick(this.lines[0])
             } else {
               console.log('this.enginetime', this.enginetime)

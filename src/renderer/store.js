@@ -224,7 +224,8 @@ export const store = new Vuex.Store({
     studySolution: null, // engine calculated best solution
     newSolution: false, // flag engine get new solution
     showSolution: false, // show / hide solution in board
-    studyFen: ''
+    studyFen: '',
+    studyEngineOn: false
   },
   mutations: { // sync
     increaseEngineNumber (state) {
@@ -580,6 +581,9 @@ export const store = new Vuex.Store({
     },
     setStudyFen (state, payload) {
       state.studyFen = payload
+    },
+    setStudyEngineOn (state, payload) {
+      state.studyEngineOn = payload;
     }
   },
   actions: { // async
@@ -1523,6 +1527,9 @@ export const store = new Vuex.Store({
     },
     studyFen (state) {
       return state.studyFen
+    },
+    studyEngineOn (state) {
+      return state.studyEngineOn
     }
   }
 })

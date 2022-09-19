@@ -218,7 +218,7 @@ export default {
       'boardStyle', 'fen', 'lastFen', 'orientation', 'moves', 'isPast', 'dimensionNumber',
       'analysisMode', 'active', 'PvE', 'enginetime', 'resized', 'resized9x9width', 'resized9x9height',
       'resized9x10width', 'resized9x10height', 'dimNumber', 'PvEInput',
-      'newSolution', 'studySolution', 'studyStep', 'currentStudyStep', 'showSolution'])
+      'newSolution', 'studySolution', 'studyStep', 'currentStudyStep', 'showSolution', 'studyEngineOn'])
   },
   watch: {
     dimensionNumber () {
@@ -369,7 +369,9 @@ export default {
               }
               this.pieceShapes = pieceShapes
               this.shapes = shapes
-              // this.drawShapes()
+              if (this.studyEngineOn) {
+                this.drawShapes()
+              }
             }
           }
         }
@@ -383,6 +385,11 @@ export default {
           this.shapes[this.shapes.length - 1].brush = 'yellow'
         }
       }
+      this.drawShapes()
+    },
+    studyEngineOn () {
+      this.pieceShapes = []
+      this.shapes = []
       this.drawShapes()
     },
     variant () {
@@ -912,24 +919,30 @@ export default {
           console.log('my move', { move: uciMove, prev: prevMov })
           this.updateHand()
           this.afterMove()
-          if (this.studyStep > this.currentStudyStep) {
-            if (uciMove === this.studySolution.ucimove) {
-              // correct move
-              this.$store.commit('increaseCurrentStudyStep')
-              this.$store.commit('setShowSolution', false)
-              this.$store.commit('setNewSolutionAvailable', false)
+          if (this.turn === 'black') {
+            if (this.studyStep > this.currentStudyStep) {
+              if (uciMove === this.studySolution.ucimove) {
+                // correct move
+                this.$store.commit('increaseCurrentStudyStep')
+                this.$store.commit('setShowSolution', false)
+                this.$store.commit('setNewSolutionAvailable', false)
 
-              this.pieceShapes = []
-              this.shapes = []
-              this.drawShapes()
-            } else if (this.currentStudyStep !== null) {
-              // stop back wrong step
-              this.wrongMove = true
-              engine.send('stop')
-              setTimeout(() => {
-                this.deleteWrongStudyMove()
-              }, 400)
+                this.pieceShapes = []
+                this.shapes = []
+                this.drawShapes()
+              } else if (this.currentStudyStep !== null) {
+                // stop back wrong step
+                this.wrongMove = true
+                engine.send('stop')
+                setTimeout(() => {
+                  this.deleteWrongStudyMove()
+                }, 400)
+              }
             }
+          } else {
+            this.pieceShapes = []
+            this.shapes = []
+            this.drawShapes()
           }
           console.log(this.turn)
         }
